@@ -1,3 +1,4 @@
+/*
 var a;
 a=10;
 var b=11;
@@ -554,16 +555,190 @@ try{
     console.log(error.message);
     }
 
+*/
+
+import logger, {appName,arithimetic,dummyFunction, multiplier, product} from './tools.js'; // logger is a variable and you can change it tot anything. When you import something from a module, you can name it whatever you want. The name you choose for the imported item doesn't have to match the name of the exported item in the module. It's entirely up to the developer's choice.
+logger(`"Welcome!The application name is " + "${appName}" + ".There is a function that returns " + "${dummyFunction()}".`); // using tmplate literals (backticks)
+
+import log, { genericFunction } from './tools.js';// log is also a variable and it can be anything e.g 'import now'
+log(genericFunction());
+
+import logs, {sibas} from './tools.js';
+logs(sibas());
+import bugger, {credentials} from './tools.js';
+bugger (credentials());
+
+log(product(2,3))
+log(product(3))
+
+try{
+    log(multiplier(2,3,4));
+} catch(error) {
+    log(error.message);
+}
+
+log(arithimetic(2,3,4,6,7,8,9,10.5,12))
+
+import mathematics,{area} from './tools.js';
+mathematics(area(4,1,2,3,4))
+
+import biograph, {Person} from './tools.js'
+let person1 = new Person("Somto","Ujunwa","Female",1.56);
+let person2 = new Person ("Gossy","Udeani","Female",1.56);
+person1.firstName = "emmanuella";
+log(`Person 1 is ${person1.getfirstName()} whose height is ${person1.height}. Person 2 is ${person2.getfirstName()} whose height is ${person2.height}`);
+
+import math,{CustomMath} from './tools.js'
+math(CustomMath.sqrt(100));
+
+import bio,{User} from './tools.js';
+let user1= new User ("myusername","mypassword","Somto","Ujunwa","Female","1.61");
+log(`The username of ${user1.firstName} is ${user1.username}`)
+
+new Promise ((resolve,reject) => { /* takes parameters. Promises wrap a particular task which needs to be executed asynchronously. Two outcomes: either resolved(everything works) or reject(task doesnt execute) most times when it resolves it is to accomplish another task, maybe handle an error*/
+    setTimeout(()=> {
+        resolve("Timeout is over");
+    },1000) // this is where the promise ends
+}).then ((data)=>{ // the then is the callback to execute whatver the promise said to do. it refers back to the outcome of the promise
+    log(`${data}`);// this data can be anything because it is specified as any.
+}).catch((error) => {
+    log(`${error}`); //could also be bio
+});
+
+let user2 = new User ("igudeani","011021","Larissa","chigosirimmaya","female",undefined);
+bio(`The username of ${user2.firstName} is ${user2.username}`)
 
 
+new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+        reject("Timeout is over but i am upset, you should not have invoked a timeout in the firts  place. Hence i am sending a rejct instread of a reolve");
+    }, 1000)
+}). then((data)=>{
+    log(`${data}`);
+}).catch((error)=>{
+    log(`Error message recieved: ${error}`);
+})
+// because you are rejecting, the catch is activated or executed, but if you reolve, the .then  block will be exectuted. so after one second the reolve function will be called and the then block will be executed, but now the reject function is called after one second and the catch block is executed
+let user3 = new User ("Firedaisi","1937","Firdaus","Oyebanji","female",undefined);
+bio(`The username of ${user3.firstName} is ${user3.username}`)
+
+let myPromise = new Promise((resolve,reject)=> { // another important thing about Promise is that new Promise() coud also have been written as an expression passed to a named varible
+    setTimeout(() => {
+        resolve("Timeout est fini");
+    }, 1000);
+}); myPromise.then((data)=>{ // the .then and the .catch are then called on that variable afterwards.
+    log(`${data}`);
+}); myPromise.catch((error)=>{
+    log(`${error}`);
+});
+new Promise ((resolve,reject)=> {
+    setTimeout(() => {
+        reject("Timeout is over, but i am upset cause youre not supposed to invoke in the first place, but i am sending a reject")
+    }, 1000);
+}).then((data)=>{
+    log(`${data}`);
+}).catch((error)=>{
+    log(`Error message recieved: ${error}`);
+}).then(()=>{
+    log(`This function is executed after sucess or failure is returned`)
+});
+//  another point to note about promise is that another .then() call can be made after the .catch(). The additional .then() call is for a function that must be executed independent of whether the asynchronous function returned resolve or reject.
+
+let url = 'https://jsonplaceholder.typicode.com/users/4';
+fetch(url) // this is an a function that resolves a promise
+.then (response => response.json())
+.then(data => log(`Data: Id = ${data.id}, Name = ${data.name}, Email = ${data.email}`)) //use the json data     
+.catch(error => log(`Error: ${error}`));
+
+let link = ' https://jsonplaceholder.typicode.com/users/1';
+fetch (link)//you do not have to be the one to define a new promise, because there are some built in functions in other libraries and all you have to do is provide the parameters required by the funtion and get the response with the .then and .catch.
+.then(reply => reply.json()) // thesse reply and reply.json are variables, they can also be respnse.json
+.then(data =>log(`Data: id = ${data.id},Name = ${data.name},Email = ${data.email}`))
+.catch(error =>log(`Error:${error}`));
+
+let fetch1 = fetch('https://jsonplaceholder.typicode.com/users/1').then(response => response.json())
+let fetch2 = fetch('https://jsonplaceholder.typicode.com/users/2').then(response => response.json())
+let fetch3 = fetch('https://jsonplaceholder.typicode.com/users/3').then(response => response.json()) 
+
+Promise.all([fetch1,fetch2,fetch3])// a situation where you would like to fetch asynchronously from multiple differnt sources and you want to act on the data only when all thedifferent asynchronous calls have returned. for this we use the promise.all(). this statement will get data for the three calls in an array
+.then((data)=> {
+    log(`User1 = ${data[0].name}; User2 = ${data[1].name}; User3 = ${data[2].name}`)//display data from array
+})
+
+const promiseAwareTimeout2 = (milliseconds=1000) =>{//This defines the function that will return new promise that wraps the asynchronous call to setTimeout(). this function expects miliseconds to be passed and if not the default will be 1000 miliseconds
+    return new Promise((resolve,reject)=>{
+        setTimeout(()=>{
+            resolve(`Timeout of ${milliseconds} milliseconds is over`);//send out  sucess feedback using reolve
+        },milliseconds)
+    });
+}
+const usepromiseAwareTimeout2 = async(milliseconds) => {// define a function that uses our promise executor
+    log('About to call timeout')
+    try{
+        log(await promiseAwareTimeout2(milliseconds));
+    }catch(error){
+        log(error)
+    }
+};
+usepromiseAwareTimeout2(4000);
+
+let usersUrl = 'https://jsonplaceholder.typicode.com/users/';
+const getUserById = async (userId) => { //user id parameter is expected
+     let url = usersUrl + userId; //get the specific url for the user to fetch
+     const response = await fetch(url); //make a call to the asynchronous fetch()
+     const data = await response.json(); //make a call to the asynchronous conversion to json.     
+     log (data.name); //log the feedback. 
+    } 
+    getUserById(2); //This should display 'Ervin Howell' on the browser. 
+
+/*const promiseAwareTimeout = (milliseconds = 1000) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() =>{
+            resolve(`Timeout of ${milliseconds} milliseconds is over`);
+        
+        }, milliseconds)
+
+    });
+}
+const usePromiseAwareTimeout = async(milliseconds) => { //whatever data youre passing is going to resolve a promise, it is expecting a promise
+    log('About to call timeout')
+    try{
+        log(await promiseAwareTimeout(milliseconds));
+    }catch(error) {
+        log(error);
+    }
+};
+usePromiseAwareTimeout(3000);*/
+// i dont understand this thing arghhhhh
 
 
+function* waitList(list){
+    for(let person of list) {
+        yield person; // creates yield for each item on the list. The list indicates a time of pause and resume in the function
+    }
+}//a return; can be used to terminate the generator at any point, it can e used betweeen yield statements if the developer wants to ignor ethe rest of the yields.
+let mywaitList = waitList(['Firdaus','Gossy','Somto']);// calling waitList
+
+let output = `The first yield value is: ${mywaitList.next().value}
+Here is what is returned in the next call:${mywaitList.next().value}
+Hopefully we still have room for a next call. Here is the return: ${mywaitList.next().value}
+what if we call again and there is no more value to yield. Here is what we get: ${mywaitList.next().value}`//prepare the output
+
+log(output);
+
+function* complex(list) {
+    for(let[index,value] of list.entries()){
+        yield `Hi ${value}. You are number ${index + 1} on the list`
+    }// return; terminates a generator at any point. can be used between two yeild statements
+
+}
+let mycomplex = complex(['Oyebanji','Udeani','Ujunwa']);
+
+let output2 = `The first yield value is: ${mycomplex.next().value}
+Here is what is returned in the next call:${mycomplex.next().value}
+Hopefully we still have room for a next call. Here is the return: ${mycomplex.next().value}
+what if we call again and there is no more value to yield. Here is what we get: ${mycomplex.next().value}`//prepare the output
+
+log(output2);
 
 
-
-
-
-
-//import logger, {appName, dummyFunction} from './tools';
-//logger(`Welcome! The application name is "${appName}".
-//There is a function that returns "${dummyFunction()}".`);
